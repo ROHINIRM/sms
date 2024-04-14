@@ -45,12 +45,11 @@ function Register() {
     //     localStorage.setItem(localStorageKey, JSON.stringify(storedData));
     //     console.log(`Form data saved to localStorage (${userType}):`, storedData);
     // };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const newErrors = {};
         const { name, email, password, mobileNumber, userType, manager, ...data } = formData;
-
+    
         if (isEmpty(name)) {
             newErrors.name = 'Please enter your name.';
         }
@@ -73,14 +72,15 @@ function Register() {
             newErrors.manager = 'Please select a manager.';
         }
         if (Object.keys(newErrors).length === 0) {
+            console.log('Form Data:', formData); 
             let localStorageKey = userType === 'student' ? 'studentFormData' : userType === 'manager' ? 'managerFormData' : 'userFormData';
             let storedData = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-
-            storedData.push(data); // Push the form data into storedData array
-
+    
+            storedData.push(formData); 
+    
             localStorage.setItem(localStorageKey, JSON.stringify(storedData));
             console.log(`Form data saved to localStorage (${userType}):`, storedData);
-
+    
             setFormData({
                 name: '',
                 email: '',
@@ -94,9 +94,62 @@ function Register() {
             setErrors(newErrors);
         }
     };
-
+    
     const managerData = JSON.parse(localStorage.getItem('managerFormData'));
     console.log('Manager Data:', managerData);
+    
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     const newErrors = {};
+    //     const { name, email, password, mobileNumber, userType, manager, ...data } = formData;
+
+    //     if (isEmpty(name)) {
+    //         newErrors.name = 'Please enter your name.';
+    //     }
+    //     if (isEmpty(email)) {
+    //         newErrors.email = 'Please enter your email.';
+    //     } else if (!/\S+@\S+\.\S+/.test(email)) {
+    //         newErrors.email = 'Please enter a valid email address.';
+    //     }
+    //     if (isEmpty(password)) {
+    //         newErrors.password = 'Please enter your password.';
+    //     } else if (password.length < 6) {
+    //         newErrors.password = 'Password must be at least 6 characters.';
+    //     }
+    //     if (isEmpty(mobileNumber)) {
+    //         newErrors.mobileNumber = 'Please enter your mobile number.';
+    //     } else if (!isValidPhoneNumber(mobileNumber)) {
+    //         newErrors.mobileNumber = 'Please enter a valid phone number.';
+    //     }
+    //     if (userType === 'student' && isEmpty(manager)) {
+    //         newErrors.manager = 'Please select a manager.';
+    //     }
+    //     if (Object.keys(newErrors).length === 0) {
+    //         console.log('Form Data:', formData); // Add this line
+    //         let localStorageKey = userType === 'student' ? 'studentFormData' : userType === 'manager' ? 'managerFormData' : 'userFormData';
+    //         let storedData = JSON.parse(localStorage.getItem(localStorageKey)) || [];
+
+    //         storedData.push(data); // Push the form data into storedData array
+
+    //         localStorage.setItem(localStorageKey, JSON.stringify(storedData));
+    //         console.log(`Form data saved to localStorage (${userType}):`, storedData);
+
+    //         setFormData({
+    //             name: '',
+    //             email: '',
+    //             password: '',
+    //             mobileNumber: '',
+    //             userType: ' ',
+    //             manager: ''
+    //         });
+    //         setErrors({});
+    //     } else {
+    //         setErrors(newErrors);
+    //     }
+    // };
+
+    // const managerData = JSON.parse(localStorage.getItem('managerFormData'));
+    // console.log('Manager Data:', managerData);
 
 
     return (
@@ -137,7 +190,7 @@ function Register() {
 
                                 value={formData.name}
                                 onChange={handleInputChange} />
-                            {errors.name && <div className="text-danger">{errors.name}</div>}
+                            {errors.name && <div className="text-danger">{errors.name}</div>} 
                         </div>
                         <div className="mb-3">
                             <input type="email"
@@ -147,7 +200,7 @@ function Register() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange} />
-                            {errors.email && <div className="text-danger">{errors.email}</div>}
+                            {errors.email && <div className="text-danger">{errors.email}</div>} 
                         </div>
                         <div className="mb-3">
                             <input type="password"
@@ -157,7 +210,7 @@ function Register() {
                                 name="password"
                                 value={formData.password}
                                 onChange={handleInputChange} />
-                            {errors.password && <div className="text-danger">{errors.password}</div>}
+                            {errors.password && <div className="text-danger">{errors.password}</div>} 
                         </div>
                         <div className="mb-3">
 
@@ -168,14 +221,13 @@ function Register() {
                                 name="mobileNumber"
                                 value={formData.mobileNumber}
                                 onChange={handleInputChange} />
-                            {errors.mobileNumber && <div className="text-danger">{errors.mobileNumber}</div>}
+                            {errors.mobileNumber && <div className="text-danger">{errors.mobileNumber}</div>} 
                         </div>
 
                         <div className="mb-3">
                             <select className="form-select"
                                 aria-label="User Type"
                                 name="userType"
-
                                 value={formData.userType}
                                 onChange={handleInputChange}>
                                 <option value="user">User</option>
@@ -183,28 +235,29 @@ function Register() {
                                 <option value="manager">Manager</option>
                             </select>
                         </div>
-                        {formData.userType === 'student' && (
-                            <div className="mb-3">
-                                <select className="form-select" aria-label="Manager"
-                                    name="manager"
-                                    value={formData.manager}
-                                    onChange={handleInputChange}>
-                                    <option >Select Manager</option>
+                        {
+                            formData.userType === 'student' && (
+                                <div className="mb-3">
+                                    <select className="form-select" aria-label="Manager"
+                                        name="manager"
+                                        value={formData.manager}
+                                        onChange={handleInputChange}>
+                                        <option >Select Manager</option>
 
-                                    {managerData && managerData.map((manager, index) => (
-                                        <option key={index} value={manager.name}>{manager.name}</option>
-                                    ))}
+                                        {managerData && managerData.map((manager, index) => (
+                                            <option key={index} value={manager.name}>{manager.name}</option>
+                                        ))}
 
-                                </select>
-                                {errors.name && <div className="text-danger">{errors.name}</div>}
+                                    </select>
 
-                            </div>
-                        )}
+                                </div>
+                            )}
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
+
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
