@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Register from './Register';
 import ViewAllUsers from './ViewAllUsers';
 
@@ -22,6 +22,10 @@ function AdminHome() {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/register">Registration</Link>
                             </li>
+                            <li class="nav-item">
+                                <Link to={'/'}>Logout</Link >
+                            </li>
+
                         </ul>
                     </div>
                 </div>

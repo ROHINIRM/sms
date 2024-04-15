@@ -42,6 +42,11 @@ function ManagerHome() {
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link active" aria-current="page" to="/studundermanager">Batch Student Details </Link>
+                  <li className="nav-item" >
+                    <Link to={'/'}>Logout</Link>
+                  </li>
+                  
+
                 </li>
               </ul>
             </div>

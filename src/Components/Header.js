@@ -33,9 +33,10 @@ function Header() {
                                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                             </li>
                         </ul> */}
-                        <li class="nav-item">
+
+                        {/* <li class="nav-item">
                             <Link to={'/'}>Logout</Link >
-                        </li>
+                        </li> */}
 
                     </div>
                 </div>

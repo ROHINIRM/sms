@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { isEmpty } from 'lodash';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 
 
 function EditManager() {
+    const [errors, setErrors] = useState({});
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
@@ -21,22 +24,41 @@ function EditManager() {
         }
     }, []);
 
+    const validate = () => {
+        const newErrors = {};
+
+        if (!userData || isEmpty(userData.name)) {
+            newErrors.name = 'Please enter your name.';
+        }
+
+        if (!userData || isEmpty(userData.mobileNumber)) {
+            newErrors.mobileNumber = 'Please enter your mobile number.';
+        } else if (!isValidPhoneNumber(userData.mobileNumber.toString())) {
+            newErrors.mobileNumber = 'Please enter a valid phone number.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const allManagerData = JSON.parse(localStorage.getItem('managerFormData')) || [];
-        const updatedUserData = allManagerData.map(manager => {
-            if (manager.email === userData.email) {
-                return { ...manager, ...userData };
-            }
-            return manager;
-        });
+        if (validate()) {
+            const allManagerData = JSON.parse(localStorage.getItem('managerFormData')) || [];
+            const updatedUserData = allManagerData.map(manager => {
+                if (manager.email === userData.email) {
+                    return { ...manager, ...userData };
+                }
+                return manager;
+            });
 
-        localStorage.setItem('managerFormData', JSON.stringify(updatedUserData));
-        console.log('Data saved successfully');
-        console.log(updatedUserData);
-        alert('Updated Successfully');
-    }
+            localStorage.setItem('managerFormData', JSON.stringify(updatedUserData));
+            console.log('Data saved successfully');
+            console.log(updatedUserData);
+            alert('Updated Successfully');
+        }
+    };
 
     return (
         <div>
@@ -82,6 +104,7 @@ function EditManager() {
                                         value={userData.name}
                                         onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                                     />
+                                    {errors.name && <div className="text-danger">{errors.name}</div>}
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">Email:</label>
@@ -103,6 +126,7 @@ function EditManager() {
                                         value={userData.mobileNumber}
                                         onChange={(e) => setUserData({ ...userData, mobileNumber: e.target.value })}
                                     />
+                                    {errors.mobileNumber && <div className="text-danger">{errors.mobileNumber}</div>}
                                 </div>
                                 <button type="submit" className="btn btn-success">
                                     Submit

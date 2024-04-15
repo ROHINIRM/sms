@@ -41,6 +41,10 @@ function StudentHome() {
                                 <li className="nav-item">
                                     <Link className="nav-link active" aria-current="page" to="/passwordstd">Password Change</Link>
                                 </li>
+                                <li class="nav-item">
+                                    <Link to={'/'}>Logout</Link >
+                                </li>
+
                             </ul>
                         </div>
                     </div>

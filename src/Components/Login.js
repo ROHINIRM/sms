@@ -33,9 +33,7 @@ function Login() {
             navigate('/AdminHome');
             return;
         }
-        else {
-            alert("Invalid Credential")
-        }
+
 
         // Check if student
         if (studentData) {
@@ -46,9 +44,6 @@ function Login() {
                 console.log('Login Success');
                 navigate('/StudentHome');
                 return;
-            }
-            else {
-                alert("Invalid Credential")
             }
         }
 
@@ -63,12 +58,9 @@ function Login() {
                 navigate('/ManagerHome');
                 return;
             }
-            else {
-                alert("Invalid Credential")
-            }
 
         }
-
+        alert("Invalid Credentials")
         console.log('Invalid Credentials');
     };
 

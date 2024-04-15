@@ -22,34 +22,12 @@ function Register() {
             [name]: value
         });
     };
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     const { userType, ...data } = formData;
-    //     let localStorageKey = '';
-    //     let storedData = JSON.parse(localStorage.getItem(localStorageKey)) || [];
 
-    //     if (userType === 'student') {
-    //         localStorageKey = 'studentFormData';
-    //         storedData = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-    //         storedData.push(data);
-    //     } else if (userType === 'manager') {
-    //         localStorageKey = 'managerFormData';
-    //         storedData = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-    //         storedData.push(data);
-    //     } else {
-    //         localStorageKey = 'userFormData';
-    //         storedData = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-    //         storedData.push(data);
-    //     }
-
-    //     localStorage.setItem(localStorageKey, JSON.stringify(storedData));
-    //     console.log(`Form data saved to localStorage (${userType}):`, storedData);
-    // };
     const handleSubmit = (e) => {
         e.preventDefault();
         const newErrors = {};
         const { name, email, password, mobileNumber, userType, manager, ...data } = formData;
-    
+
         if (isEmpty(name)) {
             newErrors.name = 'Please enter your name.';
         }
@@ -72,15 +50,15 @@ function Register() {
             newErrors.manager = 'Please select a manager.';
         }
         if (Object.keys(newErrors).length === 0) {
-            console.log('Form Data:', formData); 
+            console.log('Form Data:', formData);
             let localStorageKey = userType === 'student' ? 'studentFormData' : userType === 'manager' ? 'managerFormData' : 'userFormData';
             let storedData = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-    
-            storedData.push(formData); 
-    
+
+            storedData.push(formData);
+
             localStorage.setItem(localStorageKey, JSON.stringify(storedData));
             console.log(`Form data saved to localStorage (${userType}):`, storedData);
-    
+
             setFormData({
                 name: '',
                 email: '',
@@ -94,10 +72,10 @@ function Register() {
             setErrors(newErrors);
         }
     };
-    
+
     const managerData = JSON.parse(localStorage.getItem('managerFormData'));
     console.log('Manager Data:', managerData);
-    
+
     // const handleSubmit = (e) => {
     //     e.preventDefault();
     //     const newErrors = {};
@@ -190,7 +168,7 @@ function Register() {
 
                                 value={formData.name}
                                 onChange={handleInputChange} />
-                            {errors.name && <div className="text-danger">{errors.name}</div>} 
+                            {errors.name && <div className="text-danger">{errors.name}</div>}
                         </div>
                         <div className="mb-3">
                             <input type="email"
@@ -200,7 +178,7 @@ function Register() {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange} />
-                            {errors.email && <div className="text-danger">{errors.email}</div>} 
+                            {errors.email && <div className="text-danger">{errors.email}</div>}
                         </div>
                         <div className="mb-3">
                             <input type="password"
@@ -210,7 +188,7 @@ function Register() {
                                 name="password"
                                 value={formData.password}
                                 onChange={handleInputChange} />
-                            {errors.password && <div className="text-danger">{errors.password}</div>} 
+                            {errors.password && <div className="text-danger">{errors.password}</div>}
                         </div>
                         <div className="mb-3">
 
@@ -221,7 +199,7 @@ function Register() {
                                 name="mobileNumber"
                                 value={formData.mobileNumber}
                                 onChange={handleInputChange} />
-                            {errors.mobileNumber && <div className="text-danger">{errors.mobileNumber}</div>} 
+                            {errors.mobileNumber && <div className="text-danger">{errors.mobileNumber}</div>}
                         </div>
 
                         <div className="mb-3">

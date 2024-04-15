@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { isEmpty } from 'lodash';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 
 function EditStudent() {
+    const [errors, setErrors] = useState({});
     const [userData, setUserData] = useState(null);
 
 
@@ -20,22 +23,40 @@ function EditStudent() {
             console.log('User not found');
         }
     }, []);
+    const validate = () => {
+        const newErrors = {};
+
+        if (!userData || isEmpty(userData.name)) {
+            newErrors.name = 'Please enter your name.';
+        }
+
+        if (!userData || isEmpty(userData.mobileNumber)) {
+            newErrors.mobileNumber = 'Please enter your mobile number.';
+        } else if (!isValidPhoneNumber(userData.mobileNumber.toString())) {
+            newErrors.mobileNumber = 'Please enter a valid phone number.';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (validate()) {
+            const allStudentData = JSON.parse(localStorage.getItem('studentFormData')) || [];
+            const updatedUserData = allStudentData.map(student => {
+                if (student.email === userData.email) {
+                    return { ...student, ...userData };
+                }
+                return student;
+            });
 
-        const allStudentData = JSON.parse(localStorage.getItem('studentFormData')) || [];
-        const updatedUserData = allStudentData.map(student => {
-            if (student.email === userData.email) {
-                return { ...student, ...userData };
-            }
-            return student;
-        });
+            localStorage.setItem('studentFormData', JSON.stringify(updatedUserData));
+            console.log('Data saved successfully');
+            console.log(updatedUserData);
+            alert('Updated Successfully');
 
-        localStorage.setItem('studentFormData', JSON.stringify(updatedUserData));
-        console.log('Data saved successfully');
-        console.log(updatedUserData);
-        alert('Updated Successfully');
+        }
     }
 
 
@@ -79,6 +100,7 @@ function EditStudent() {
                                         value={userData.name}
                                         onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                                     />
+                                    {errors.name && <div className="text-danger">{errors.name}</div>}
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">Email:</label>
@@ -100,6 +122,7 @@ function EditStudent() {
                                         value={userData.mobileNumber}
                                         onChange={(e) => setUserData({ ...userData, mobileNumber: e.target.value })}
                                     />
+                                    {errors.mobileNumber && <div className="text-danger">{errors.mobileNumber}</div>}
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="manager" className="form-label">Manager:</label>
@@ -111,6 +134,7 @@ function EditStudent() {
                                         value={userData.manager}
                                         onChange={(e) => setUserData({ ...userData, manager: e.target.value })}
                                     />
+
                                 </div>
 
                                 <button type="submits" className="btn btn-success">
